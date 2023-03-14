@@ -10,7 +10,7 @@ defmodule ExPoints.Repo.Migrations.CreateUpdatePointsResetTrigger do
     $$
     BEGIN
       IF NEW.points > 100 THEN
-        NEW.points := 100;
+        NEW.points := OLD.points;
       END IF;
       RETURN NEW;
     END;
