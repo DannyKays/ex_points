@@ -24,8 +24,6 @@ defmodule ExPoints.Accounts do
   @doc """
   Gets a list of at most `max_users` with more points than `min_number`.
 
-  Uses Postgres `TABLESAMPLE` to get random rows to avoid returning the same users on every request
-
   ## Examples
 
       iex> list_users(min_number)
