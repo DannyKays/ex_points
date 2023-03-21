@@ -20,9 +20,9 @@ defmodule ExPoints.Workers.UserPoints do
   @doc """
   Starts the user points server with the given options.
   """
-  def start_link(opts) do
-    # Uses module name as the name to GenServer's init
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+  def start_link(arg, opts \\ []) do
+    name = Keyword.get(opts, :name, __MODULE__)
+    GenServer.start_link(__MODULE__, arg, name: name)
   end
 
   @doc """
@@ -32,8 +32,8 @@ defmodule ExPoints.Workers.UserPoints do
 
   Returns `{:ok, users, prev_timestamp}`
   """
-  def get_users do
-    GenServer.call(__MODULE__, :get_users, 30_000)
+  def get_users(server \\ __MODULE__) do
+    GenServer.call(server, :get_users, 30_000)
   end
 
   ## Server callbacks
@@ -55,8 +55,8 @@ defmodule ExPoints.Workers.UserPoints do
   end
 
   @impl true
-  def handle_info(:update_points, state) do
-    Task.Supervisor.async_nolink(ExPoints.TaskSupervisor, fn ->
+  def handle_info({:update_points, task_supervisor}, state) do
+    Task.Supervisor.async_nolink(task_supervisor, fn ->
       Accounts.update_points(@min_points, @max_points)
     end)
 
@@ -81,6 +81,6 @@ defmodule ExPoints.Workers.UserPoints do
   def handle_info(_msg, state), do: {:noreply, state}
 
   defp schedule_update do
-    Process.send_after(self(), :update_points, @update_after)
+    Process.send_after(self(), {:update_points, ExPoints.TaskSupervisor}, @update_after)
   end
 end

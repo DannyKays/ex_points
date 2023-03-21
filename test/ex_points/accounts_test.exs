@@ -15,6 +15,12 @@ defmodule ExPoints.AccountsTest do
       assert Accounts.list_users() == [user]
     end
 
+    test "list_users/2 returns all users with points morethan min_number" do
+      max_users = 2
+      min_number = Enum.random(0..100)
+      assert Accounts.list_users(min_number, max_users) == []
+    end
+
     test "get_user!/1 returns the user with given id" do
       user = user_fixture()
       assert Accounts.get_user!(user.id) == user
@@ -52,6 +58,10 @@ defmodule ExPoints.AccountsTest do
     test "change_user/1 returns a user changeset" do
       user = user_fixture()
       assert %Ecto.Changeset{} = Accounts.change_user(user)
+    end
+
+    test "load_users/0 inserts 1,000,000 user seeds" do
+      assert {1_000_000 = _row_count, nil} = Accounts.load_users()
     end
   end
 end

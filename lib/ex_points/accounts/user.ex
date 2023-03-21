@@ -18,5 +18,6 @@ defmodule ExPoints.Accounts.User do
       less_than_or_equal_to: 100,
       message: " should be 0 - 100"
     )
+    |> check_constraint(:points, name: :user_points_range, message: " should be 0 - 100")
   end
 end

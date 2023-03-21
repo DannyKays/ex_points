@@ -125,10 +125,11 @@ defmodule ExPoints.Accounts do
   """
   def update_points(min_points, max_points) do
     User
-    |> where([u], u.points < ^max_points)
     |> update(
-      set: [updated_at: ^timestamp()],
-      inc: [points: fragment("random_points(?, ?)", ^min_points, ^max_points)]
+      set: [
+        updated_at: ^timestamp(),
+        points: fragment("random_points(?, ?)", ^min_points, ^max_points)
+      ]
     )
     |> Repo.update_all([])
   end

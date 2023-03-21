@@ -3,15 +3,23 @@ defmodule ExPointsWeb.UserControllerTest do
 
   describe "Users index/2" do
     alias ExPoints.Workers.UserPoints
+    alias ExPointsWeb.UserView
 
-    test "GET /", %{conn: conn} do
+    setup do
+      child_spec = %{
+        id: UserPointsTest,
+        start: {UserPoints, :start_link, [[], [name: UserPointsTest]]}
+      }
+
+      pid = start_supervised!(child_spec)
+      [pid: pid]
+    end
+
+    test "GET /", %{conn: conn, pid: pid} do
       conn = get(conn, "/")
-      {:ok, users, _timestamp} = UserPoints.get_users()
-
-      assert json_response(conn, 200) == %{
-               "timestamp" => nil,
-               "users" => Enum.map(users, &Map.take(&1, [:id, :points]))
-             }
+      {:ok, users, timestamp} = UserPoints.get_users(pid)
+      user_points_resp = UserView.render("index.json", %{timestamp: timestamp, users: users})
+      assert json_response(conn, 200) == user_points_resp
     end
   end
 end
