@@ -6,11 +6,11 @@ defmodule ExPointsWeb.UserView do
 
     %{
       "timestamp" => timestamp,
-      "users" => render_many(users, __MODULE__, "user.json")
+      "users" => render_many(users, __MODULE__, "show.json")
     }
   end
 
-  def render("user.json", %{user: user}) do
+  def render("show.json", %{user: user}) do
     %{"id" => user.id, "points" => user.points}
   end
 end

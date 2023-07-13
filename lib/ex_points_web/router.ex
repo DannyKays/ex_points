@@ -1,14 +1,37 @@
 defmodule ExPointsWeb.Router do
   use ExPointsWeb, :router
 
+  pipeline :browser do
+    plug(:accepts, ["html", "json"])
+    plug(:fetch_session)
+    plug(:fetch_flash)
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+    plug OpenApiSpex.Plug.PutApiSpec, module: ExPoints.ApiSpec
+  end
+
+  scope "/" do
+    pipe_through :browser # Use the default browser stack
+
+    get "/swaggerui", OpenApiSpex.Plug.SwaggerUI, path: "/openapi"
   end
 
   scope "/", ExPointsWeb do
     pipe_through :api
 
-    get("/", UserController, :index)
+    get("/users", UserController, :index)
+    get("/show/:id", UserController, :show)
+    post("/new", UserController, :create)
+  end
+
+  scope "/" do
+    pipe_through :api
+
+    get "/openapi", OpenApiSpex.Plug.RenderSpec, []
   end
 
   # Enables LiveDashboard only for development
