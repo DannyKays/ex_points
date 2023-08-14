@@ -7,6 +7,13 @@ defmodule ExPoints.Application do
 
   @impl true
   def start(_type, _args) do
+    credentials =
+      "/Users/dannykalaluka/Documents/Applications/GDriveKeys/expoints-credentials.json"
+      |> File.read!()
+      |> Jason.decode!()
+
+    source = {:service_account, credentials, scopes: ["https://www.googleapis.com/auth/drive"]}
+
     children = [
       # Start the Ecto repository
       ExPoints.Repo,
@@ -19,7 +26,8 @@ defmodule ExPoints.Application do
       # Start a worker by calling: ExPoints.Worker.start_link(arg)
       # {ExPoints.Worker, arg}
       {Task.Supervisor, name: ExPoints.TaskSupervisor},
-      {ExPoints.Workers.UserPoints, [[]]}
+      {ExPoints.Workers.UserPoints, [[]]},
+      {Goth, name: ExPoints.Goth, source: source}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

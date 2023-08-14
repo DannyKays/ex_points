@@ -15,7 +15,8 @@ defmodule ExPointsWeb.Router do
   end
 
   scope "/" do
-    pipe_through :browser # Use the default browser stack
+    # Use the default browser stack
+    pipe_through :browser
 
     get "/swaggerui", OpenApiSpex.Plug.SwaggerUI, path: "/openapi"
   end
@@ -26,6 +27,8 @@ defmodule ExPointsWeb.Router do
     get("/users", UserController, :index)
     get("/show/:id", UserController, :show)
     post("/new", UserController, :create)
+    post("/new/image", UserController, :upload_image)
+    get("/show/image/:id", UserController, :show_image)
   end
 
   scope "/" do

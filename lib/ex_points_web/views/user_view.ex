@@ -13,4 +13,12 @@ defmodule ExPointsWeb.UserView do
   def render("show.json", %{user: user}) do
     %{"id" => user.id, "points" => user.points}
   end
+
+  def render("image.json", %{image: image}) do
+    %{
+      "name" => image.name,
+      "mime_type" => image.mime_type,
+      "google_drive_id" => image.google_drive_id
+    }
+  end
 end

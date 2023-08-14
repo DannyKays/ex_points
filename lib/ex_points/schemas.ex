@@ -3,7 +3,6 @@ defmodule ExPoints.Schemas do
   alias OpenApiSpex.Schema
   # alias ExPoints.Accounts.User
 
-
   defmodule User do
     OpenApiSpex.schema(%{
       title: "User",
@@ -85,4 +84,76 @@ defmodule ExPoints.Schemas do
     def schema, do: @schema
     defstruct Map.keys(@schema.properties)
   end
+
+  defmodule Image do
+    OpenApiSpex.schema(%{
+      title: "Image",
+      description: "An image upload",
+      type: :object,
+      properties: %{
+        name: %Schema{type: :string, description: "Image name"},
+        mime_type: %Schema{type: :string, description: "Image mimeType"},
+        google_drive_id: %Schema{type: :string, description: "Image google drive id"}
+      },
+      required: [:name, :mime_type],
+      example: %{
+        "name" => "pic1",
+        "mime_type" => "image/jpeg",
+        "google_drive_id" => "12wG234"
+      },
+      "x-struct": __MODULE__
+    })
+  end
+
+  defmodule ImageRequest do
+    OpenApiSpex.schema(%{
+      title: "ImageRequest",
+      description: "POST body for uploading an image",
+      type: :object,
+      properties: %{
+        file: %Schema{type: :object},
+        upload_folder: %Schema{type: :string, default: nil, description: "Image upload folder"}
+      },
+      required: [:file],
+      example: %{
+        "file" => %{},
+        "upload_folder" => "images/oct"
+      }
+    })
+  end
+
+  defmodule ImageResponse do
+    @behaviour OpenApiSpex.Schema
+
+    @schema %Schema{
+      title: "ImageResponse",
+      description: "Response schema for single image",
+      type: :object,
+      properties: %{
+        name: %Schema{type: :string, description: "Image name"},
+        mime_type: %Schema{type: :string, description: "Image mimeType"}
+      },
+      required: [:name, :mime_type],
+      example: %{
+        "name" => "pic1",
+        "mime_type" => "image/jpeg"
+      },
+      "x-struct": __MODULE__
+    }
+
+    def schema, do: @schema
+  end
 end
+
+# Example on operation.parameter
+
+# parameters: [
+#   id: [
+#     in: :path,
+#     # `:type` can be an atom, %Schema{}, or %Reference{}
+#     type: %Schema{type: :integer, minimum: 1},
+#     description: "User ID",
+#     example: 123,
+#     required: true
+#   ]
+# ],

@@ -4,32 +4,33 @@ defmodule ExPointsWeb.FallbackController do
   alias Plug.Conn
   alias OpenApiSpex.OpenApi
 
-
   def call(conn, {:error, %{errors: errors}}) do
-    response = %{
-      errors: Enum.map(errors, fn {k, error} ->
-        "#{k} #{ExPointsWeb.ErrorHelpers.translate_error(error)}"
-      end)
-    }
-
-    json = OpenApi.json_encoder().encode!(response)
+    json = OpenApi.json_encoder().encode!(%{errors: render_errors(errors)})
 
     conn
     |> Conn.put_resp_content_type("application/json")
     |> Conn.send_resp(422, json)
   end
 
-  def call(conn, {:error, :not_found}) do
+  def call(conn, {:error, reason}) do
+    json = OpenApi.json_encoder().encode!(%{errors: %{internal_server_error: inspect(reason)}})
+
     conn
-    |> put_status(:not_found)
-    |> put_view(ExPointsWeb.ErrorView)
-    |> render(:"404")
+    |> Conn.put_resp_content_type("application/json")
+    |> Conn.send_resp(422, json)
   end
 
-  def call(conn, {:error, :unauthorized}) do
-    conn
-    |> put_status(:forbidden)
-    |> put_view(ExPointsWeb.ErrorView)
-    |> render(:"403")
+  defp render_errors(%Ecto.Changeset{valid?: false} = changeset) do
+    Ecto.Changeset.traverse_errors(changeset, fn {_, error} ->
+      error[:validation]
+    end)
+  end
+
+  defp render_errors(errors) do
+    alias OpenApiSpex.Cast.Error
+
+    for error <- errors, into: %{} do
+      {Error.path_to_string(error), [error.reason]}
+    end
   end
 end
