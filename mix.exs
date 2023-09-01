@@ -47,7 +47,8 @@ defmodule ExPoints.MixProject do
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:open_api_spex, "~> 3.4"},
       {:goth, "~> 1.3"},
-      {:google_api_drive, "~> 0.25.1"}
+      {:google_api_drive, "~> 0.25.1"},
+      {:csv, "~> 3.0"}
     ]
   end
 

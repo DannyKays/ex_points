@@ -29,6 +29,11 @@ defmodule ExPointsWeb.Router do
     post("/new", UserController, :create)
     post("/new/image", UserController, :upload_image)
     get("/show/image/:id", UserController, :show_image)
+    delete("/delete/image/:id", UserController, :delete_image)
+    get("/show/folder/:folder", UserController, :show_folder)
+    post("/upload/app/configs", UserController, :create_app_config)
+    get("/download/file/:file_name", UserController, :download_file)
+    post("/update/app/configs", UserController, :update_app_config)
   end
 
   scope "/" do

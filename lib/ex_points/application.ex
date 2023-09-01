@@ -12,7 +12,7 @@ defmodule ExPoints.Application do
       |> File.read!()
       |> Jason.decode!()
 
-    source = {:service_account, credentials, scopes: ["https://www.googleapis.com/auth/drive"]}
+    source = {:service_account, credentials, scopes: ["https://www.googleapis.com/auth/drive", "https://www.googleapis.com/auth/drive.appdata"]}
 
     children = [
       # Start the Ecto repository

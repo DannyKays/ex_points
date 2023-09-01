@@ -1,0 +1,228 @@
+{
+  "folder_mappings": [
+    {
+      "folder": "Canada_CA (CA10) - Canada Remote Technology Inc.",
+      "remote_entity": "Canada Remote Technology Inc."
+    },
+    {
+      "folder": "Kyrgyzstan_KG - Remote KG LLC",
+      "remote_entity": "Remote KG LLC"
+    },
+    {
+      "folder": "Albania_AL-Remote Albania SHPK",
+      "remote_entity": "Remote Albania"
+    },
+    {
+      "folder": "Norway_NO - Remote Technology Norway AS",
+      "remote_entity": "Remote Technology Norway AS"
+    },
+    {
+      "folder": "Serbia_RS (RS10) - Remote Technology RS",
+      "remote_entity": "Remote Technology RS"
+    },
+    {
+      "folder": "Argentina_AR (AR10) - Remote Argentina SRL",
+      "remote_entity": "Remote Argentina SRL"
+    },
+    {
+      "folder": "Nigeria_NG - RN Virtual Technology Services Limited",
+      "remote_entity": "RN Virtual Technology Services Limited"
+    },
+    {
+      "folder": "Sweden_SE (SE10) - Remote Technology Sweden AB",
+      "remote_entity": "Remote Technology Sweden AB"
+    },
+    {
+      "folder": "Portugal_PT (PT10) - Remote Tech Unipessoal Lda",
+      "remote_entity": "Remote Tech Unipessoal Lda"
+    },
+    {
+      "folder": "Belarus_BY - RTB Technology Services LLC",
+      "remote_entity": "RTB Technology Services LLC"
+    },
+    {
+      "folder": "France_FR (FR20) - Remote Technology Services France (Consulting)",
+      "remote_entity": "Remote Technology Services France"
+    },
+    {
+      "folder": "Netherlands_NL10 - Remote BV",
+      "remote_entity": "Remote BV"
+    },
+    {
+      "folder": "Netherlands_NL01 (REHBV) - Remote Europe Holding BV",
+      "remote_entity": "Remote Europe Holding BV"
+    },
+    {
+      "folder": "Armenia_AM - Remote Armenia LLC ",
+      "remote_entity": "Remote Armenia LLC"
+    },
+    {
+      "folder": "Bangladesh - Remote Technology Bangladesh Ltd.",
+      "remote_entity": "Remote Technology Bangladesh Ltd."
+    },
+    {
+      "folder": "Bolivia_BO - Remote Bolivia S.R.L.",
+      "remote_entity": "Remote Bolivia S.R.L."
+    },
+    {
+      "folder": "Australia_AU (AU10) - Remote Australia Pty Ltd",
+      "remote_entity": "Remote Australia Pty Ltd"
+    },
+    {
+      "folder": "Cambodia - Remote Technology Services (Cambodia) Co., Ltd.",
+      "remote_entity": "Remote Technology Services (Cambodia) Co., Ltd."
+    },
+    {
+      "folder": "Croatia_HR (HR10) - Remote Technology Croatia d.o.o",
+      "remote_entity": "Remote Technology Croatia d.o.o"
+    },
+    {
+      "folder": "Estonia_EE - Remote Estonia OÜ",
+      "remote_entity": "Remote Estonia OÜ"
+    },
+    {
+      "folder": "Chile_CL (CL10) - Remote Chile SpA",
+      "remote_entity": "Remote Chile SpA"
+    },
+    {
+      "folder": "Egypt_EG - Remote Egypt for Outsourcing Services",
+      "remote_entity": "Remote Egypt for Outsourcing Services"
+    },
+    {
+      "folder": "Czech Republic_CZ (CZ10) - Remote Czech s.r.o",
+      "remote_entity": "Remote Czech s.r.o"
+    },
+    {
+      "folder": "Cyprus_CY - Remote Cyprus Ltd.",
+      "remote_entity": "Remote Cyprus Ltd."
+    },
+    {
+      "folder": "Finland_FI - Remote Finland Oy",
+      "remote_entity": "Remote Finland Oy"
+    },
+    {
+      "folder": "Greece_GR - Remote Greece S.M.P.C.",
+      "remote_entity": "Remote Greece S.M.P.C."
+    },
+    {
+      "folder": "Honduras - Remote Honduras, S. de R.L.",
+      "remote_entity": "Remote Honduras, S. de R.L."
+    },
+    {
+      "folder": "Kenya - Remote Technology Kenya Limited ",
+      "remote_entity": "Remote Technology Kenya Limited"
+    },
+    {
+      "folder": "Israel_IL (IL10) - Remote Europe Holding BV - Israel Branch",
+      "remote_entity": "Remote Europe Holding BV"
+    },
+    {
+      "folder": "Japan_JP - Remote Japan KK",
+      "remote_entity": "Remote Japan KK"
+    },
+    {
+      "folder": "Hong Kong_HK - Remote Hongkong Limited",
+      "remote_entity": "Remote Hongkong Limited"
+    },
+    {
+      "folder": "Malaysia_MY - Remote Malaysia Sdn. Bhd",
+      "remote_entity": "Remote Malaysia Sdn. Bhd"
+    },
+    {
+      "folder": "Mongolia - Remote Tech Mongolia LLC",
+      "remote_entity": "Remote Tech Mongolia LLC"
+    },
+    {
+      "folder": "Ireland_IE (IE10) - Remote Management Technology Limited",
+      "remote_entity": "Remote Management Technology Limited"
+    },
+    {
+      "folder": "Malta_MT - Remote Malta Limited",
+      "remote_entity": "Remote Malta Limited"
+    },
+    {
+      "folder": "Lithuania_LT_Remote Lithuania UAB",
+      "remote_entity": "Remote Lithuania UAB"
+    },
+    {
+      "folder": "Iceland_IS -  Remote Technology Iceland ehf",
+      "remote_entity": "Remote Technology Iceland ehf"
+    },
+    {
+      "folder": "Pakistan - Remote Pakistan (SMC-Private) Limited",
+      "remote_entity": "Remote Pakistan (SMC-Private) Limited"
+    },
+    {
+      "folder": "Morocco_MA - Remote Technology Morocco SARL",
+      "remote_entity": "Remote Technology Morocco SARL"
+    },
+    {
+      "folder": "New Zealand_NZ - Remote Technology New Zealand Limited",
+      "remote_entity": "Remote Technology New Zealand Limited"
+    },
+    {
+      "folder": "Paraguay - Remote Paraguay S.A.",
+      "remote_entity": "Remote Paraguay S.A."
+    },
+    {
+      "folder": "Slovakia_SK - Remote Slovakia s.r.o",
+      "remote_entity": "Remote Slovakia s.r.o"
+    },
+    {
+      "folder": "Ukraine_UA (UA10) - Remote Ukraine LLC",
+      "remote_entity": "Remote Ukraine LLC"
+    },
+    {
+      "folder": "Uruguay - Remote Uruguay S.R.L.",
+      "remote_entity": "Remote Uruguay S.R.L."
+    },
+    {
+      "folder": "South Korea - Remote South Korea LLC",
+      "remote_entity": "Remote South Korea LLC"
+    },
+    {
+      "folder": "Turkey_TR - Remote Teknoloji Danışmanlık A.Ş",
+      "remote_entity": "Remote Teknoloji Danışmanlık A.Ş"
+    },
+    {
+      "folder": "Sri Lanka - Remote Lanka (Private) Limited",
+      "remote_entity": "Remote Lanka (Private) Limited"
+    },
+    {
+      "folder": "UK (GB10) - Remote Technology Services Ltd",
+      "remote_entity": "Remote Technology Services Ltd"
+    },
+    {
+      "folder": "Indonesia - PT Remote Tech Indonesia",
+      "remote_entity": "PT Remote Tech Indonesia"
+    },
+    {
+      "folder": "South Africa_ZA (ZA10)- South Africa Remote Technology PTY",
+      "remote_entity": "South Africa Remote Technology"
+    },
+    {
+      "folder": "Philippines_PH (PH10) - Remote Philippines Inc.",
+      "remote_entity": "Remote Philippines Inc."
+    },
+    {
+      "folder": "Taiwan_TW - Remote Taiwan Ltd.",
+      "remote_entity": "Remote Taiwan Ltd."
+    },
+    {
+      "folder": "Georgia_GE - Remote Georgia LLC",
+      "remote_entity": "Remote Georgia LLC"
+    },
+    {
+      "folder": "Luxembourg_LU (LU10) - Remote Luxembourg S.à r.l.",
+      "remote_entity": "Remote Luxembourg S.à r.l."
+    },
+    {
+      "folder": "Bulgaria_BG (BG10) - Remote Bulgaria EOOD",
+      "remote_entity": "Remote Bulgaria EOOD"
+    },
+    {
+      "folder": "Belgium_BE (BE10) - Remote Belgium B.V.",
+      "remote_entity": "Remote Belgium"
+    }
+  ]
+}

@@ -143,6 +143,86 @@ defmodule ExPoints.Schemas do
 
     def schema, do: @schema
   end
+
+  defmodule FolderResponse do
+    @behaviour OpenApiSpex.Schema
+
+    @schema %Schema{
+      title: "FolderResponse",
+      description: "Response schema for single folder",
+      type: :object,
+      properties: %{
+        folder: %Schema{
+          type: :object,
+          description: "Folder",
+          properties: %{
+            id: %Schema{type: :string, description: "folder id"},
+            name: %Schema{type: :string, description: "folder name"}
+          }
+        },
+        sub_folders: %Schema{
+          type: :array,
+          items: %Schema{
+            type: :object,
+            properties: %{
+              remote_entity_name: %Schema{type: :string, description: "entity name"},
+              drive_folder: %Schema{type: :string, description: "folder name"},
+            }
+          }
+        }
+      },
+      required: [:folder, :sub_folders],
+      example: %{
+        "folder" => %{"id" => "someid", "name" => "somefoldername"},
+        "sub_folders" => [
+          %{"remote_entity_name" => "test", "drive_folder" => "somefoldername"}
+        ]
+      },
+      "x-struct": __MODULE__
+    }
+
+    def schema, do: @schema
+  end
+
+  defmodule AppConfigUploadRequest do
+    OpenApiSpex.schema(%{
+      title: "AppConfigUploadRequest",
+      description: "POST body for uploading a config file",
+      type: :object,
+      properties: %{
+        file: %Schema{type: :object},
+        upload_folder: %Schema{type: :string, default: nil, description: "App config upload folder"},
+        request_type: %Schema{type: :string, default: nil, description: "App config upload type"}
+      },
+      required: [:file],
+      example: %{
+        "file" => %{},
+        "upload_folder" => "appDataFolder"
+      }
+    })
+  end
+
+  defmodule DriveFileResponse do
+    @behaviour OpenApiSpex.Schema
+
+    @schema %Schema{
+      title: "DriveFileResponse",
+      description: "Response schema for single drive file",
+      type: :object,
+      properties: %{
+        name: %Schema{type: :string, description: "file name"},
+        mime_type: %Schema{type: :string, description: "file mimeType"}
+      },
+      required: [:name, :mime_type],
+      example: %{
+        "name" => "test-file.csv",
+        "mime_type" => "text/csv"
+      },
+      "x-struct": __MODULE__
+    }
+
+    def schema, do: @schema
+  end
 end
 
 # Example on operation.parameter

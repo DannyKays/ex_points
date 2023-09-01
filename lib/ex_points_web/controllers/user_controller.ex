@@ -159,19 +159,229 @@ defmodule ExPointsWeb.UserController do
     render(conn, "image.json", image: image)
   end
 
-  defp upload_to_google_drive(%{file: %Plug.Upload{path: path} = upload} = params) do
+  @doc """
+  API Spec for :delete image action
+  """
+  def delete_image_operation() do
+    %Operation{
+      tags: ["users", "images"],
+      summary: "Delete image",
+      description: "Delete an image by ID",
+      operationId: "UserController.show_image",
+      parameters: [
+        Operation.parameter(:id, :path, %Schema{type: :integer, minimum: 1}, "Image ID",
+          example: 123,
+          required: true
+        )
+      ],
+      responses: %{
+        200 => Operation.response("ShowImage", "application/json", Schemas.ImageResponse)
+      }
+    }
+  end
+
+  def delete_image(conn, %{id: id}) do
+    image = Images.get_image!(id)
+    with {:ok, image} <- Images.delete_image(image),
+         {:ok, %Goth.Token{token: token}} <- Goth.fetch(ExPoints.Goth),
+         drive_conn = GoogleApi.Drive.V3.Connection.new(token),
+         {:ok, drive_image} <- get_object(drive_conn, image.name),
+         {:ok, _resp} <- GoogleApi.Drive.V3.Api.Files.drive_files_delete(drive_conn, drive_image.id <> "test") do
+      render(conn, "image.json", image: image)
+    end
+  end
+
+  @doc """
+  API Spec for :load folders action
+  """
+  def show_folder_operation() do
+    %Operation{
+      tags: ["users", "folders"],
+      summary: "Show folder",
+      description: "View a folder by name",
+      operationId: "UserController.show_folder",
+      parameters: [
+        Operation.parameter(:folder, :path, %Schema{type: :string}, "folder name",
+          example: "some-drive-folder",
+          required: true
+        )
+      ],
+      responses: %{
+        200 => Operation.response("ShowFolder", "application/json", Schemas.FolderResponse)
+      }
+    }
+  end
+
+  def show_folder(conn, %{folder: folder_name}) do
+    params = [
+      includeItemsFromAllDrives: true,
+      supportsAllDrives: true,
+      corpora: "allDrives"
+    ]
+
+    with {:ok, %Goth.Token{token: token}} <- Goth.fetch(ExPoints.Goth),
+         drive_conn = GoogleApi.Drive.V3.Connection.new(token),
+         {:ok, drive_folder} <- get_object(drive_conn, folder_name, params),
+         {:ok, files} <- list_files(drive_conn, drive_folder.id, params) do
+
+      path = Application.app_dir(:ex_points, "/priv/inter_company_invoicing_drive_mappings.csv")
+      sub_folders =
+        files
+        |> Enum.filter(&(&1.mimeType == "application/vnd.google-apps.folder"))
+        |> Enum.reduce([], fn object, folders ->
+          [%{remote_entity_name: object.name, drive_folder: object.name} | folders]
+        end)
+        |> tap(fn sub_folders ->
+          content = CSV.encode(sub_folders, headers: true) |> Enum.to_list
+          File.write(path, content)
+        end)
+
+      render(conn, "folder.json", folder: drive_folder, sub_folders: sub_folders)
+    end
+  end
+
+  @doc """
+  API Spec for :create app config files action
+  """
+  def create_app_config_operation() do
+    %Operation{
+      tags: ["users", "config-files"],
+      summary: "Application configuration file in drive",
+      description: "Upload a configuaration file",
+      operationId: "UserController.create_app_config",
+      parameters: [],
+      requestBody:
+        Operation.request_body(
+          "App config upload attributes",
+          "multipart/form-data",
+          Schemas.AppConfigUploadRequest,
+          required: true
+        ),
+      responses: %{
+        201 => Operation.response("AppConfig", "application/json", Schemas.DriveFileResponse),
+        422 => OpenApiSpex.JsonErrorResponse.response()
+      }
+    }
+  end
+
+  def create_app_config(
+        conn = %{body_params: %Schemas.AppConfigUploadRequest{file: _file} = app_config_params},
+        _params
+      ) do
+    params = [
+      includeItemsFromAllDrives: true,
+      supportsAllDrives: true,
+      corpora: "allDrives"
+    ]
+    with {:ok, %GoogleApi.Drive.V3.Model.File{id: _id} = file} <- upload_to_google_drive(app_config_params, params) do
+      conn
+      |> put_status(:created)
+      |> render("drive_file.json", file: file)
+    end
+  end
+
+  @doc """
+  API Spec for :create app config files action
+  """
+  def update_app_config_operation() do
+    %Operation{
+      tags: ["users", "config-files"],
+      summary: "Application configuration file in drive",
+      description: "Update a configuaration file",
+      operationId: "UserController.update_app_config",
+      parameters: [],
+      requestBody:
+        Operation.request_body(
+          "App config update attributes",
+          "multipart/form-data",
+          Schemas.AppConfigUploadRequest,
+          required: true
+        ),
+      responses: %{
+        201 => Operation.response("AppConfig", "application/json", Schemas.DriveFileResponse),
+        422 => OpenApiSpex.JsonErrorResponse.response()
+      }
+    }
+  end
+
+  def update_app_config(
+        conn = %{body_params: %Schemas.AppConfigUploadRequest{file: _file} = app_config_params},
+        _params
+      ) do
+    params = [
+      includeItemsFromAllDrives: true,
+      supportsAllDrives: true,
+      corpora: "allDrives"
+    ]
+    with {:ok, %GoogleApi.Drive.V3.Model.File{id: _id} = file} <- upload_to_google_drive(app_config_params, params) do
+      conn
+      |> put_status(:created)
+      |> render("drive_file.json", file: file)
+    end
+  end
+
+  @doc """
+  API Spec for :load folders action
+  """
+  def download_file_operation() do
+    %Operation{
+      tags: ["users", "files", "downloads"],
+      summary: "Download file",
+      description: "Get a file by name",
+      operationId: "UserController.download_file",
+      parameters: [
+        Operation.parameter(:file_name, :path, %Schema{type: :string}, "file name",
+          example: "some-drive-file",
+          required: true
+        )
+      ],
+      responses: %{
+        200 => Operation.response("DownloadFile", "application/json", Schemas.DriveFileResponse)
+      }
+    }
+  end
+
+  def download_file(conn, %{file_name: file_name}) do
+    params = [
+      includeItemsFromAllDrives: true,
+      supportsAllDrives: true,
+      # corpora: "allDrives",
+      spaces: "appDataFolder"
+    ]
+
+    with {:ok, %Goth.Token{token: token}} <- Goth.fetch(ExPoints.Goth),
+         drive_conn = GoogleApi.Drive.V3.Connection.new(token),
+         {:ok, file_object} <- get_object(drive_conn, file_name, params),
+         {:ok, %{body: body}} <- download_file(drive_conn, file_object.id, params) do
+
+      content = CSV.decode([body], headers: true) |> Enum.map(fn {_, val} -> val end)
+
+      render(conn, "folder.json", folder: file_object, sub_folders: content)
+    end
+  end
+
+  defp upload_to_google_drive(%{file: %Plug.Upload{path: path} = upload} = params, opts \\ []) do
     with {:ok, %Goth.Token{token: token}} <- Goth.fetch(ExPoints.Goth),
          conn = GoogleApi.Drive.V3.Connection.new(token),
-         {:ok, folder_structure} <- get_upload_folder(conn, params) do
-      file_meta = build_file_meta(upload, folder_structure)
-      GoogleApi.Drive.V3.Api.Files.drive_files_create_simple(conn, "multipart", file_meta, path)
+         {:ok, destination_folder_id} <- get_upload_folder(conn, params) do
+      file_meta = build_file_meta(upload, destination_folder_id)
+
+      case params do
+        %{request_type: "update"} ->
+          app_conf_params = Keyword.merge([spaces: "appDataFolder"], opts) |> Keyword.delete(:corpora)
+          with {:ok, %{id: file_id}} <- get_object(conn, upload.filename, app_conf_params) do
+            GoogleApi.Drive.V3.Api.Files.drive_files_update_simple(conn, file_id, "multipart", file_meta, path, opts)
+          end
+        _->
+          GoogleApi.Drive.V3.Api.Files.drive_files_create_simple(conn, "multipart", file_meta, path, opts)
+      end
     end
   end
 
   defp build_file_meta(%Plug.Upload{filename: name} = upload, folder_id) do
     parent_folder_ids = List.wrap(folder_id)
     uuid = Ecto.UUID.generate()
-    filename = "#{uuid}-#{name}"
+    filename = if folder_id == ["appDataFolder"], do: name, else: "#{uuid}-#{name}"
 
     %GoogleApi.Drive.V3.Model.File{
       name: filename,
@@ -207,6 +417,7 @@ defmodule ExPointsWeb.UserController do
     end
   end
 
+  defp get_upload_folder(_conn, %{upload_folder: "appDataFolder"}), do: {:ok, ["appDataFolder"]}
   defp get_upload_folder(conn, params) do
     case get_object(conn, @gdrive_upload_folder) do
       {:ok, %{id: root_folder_id}} ->
@@ -225,6 +436,27 @@ defmodule ExPointsWeb.UserController do
     end
   end
 
+  defp download_file(conn, file_id, params) do
+    params = Keyword.merge([alt: "media"], params)
+    GoogleApi.Drive.V3.Api.Files.drive_files_get(conn, file_id, params)
+  end
+
+  defp list_files(conn, root_folder_id, opts) do
+    query = "'#{root_folder_id}' in parents"
+    opts = Keyword.merge([q: query], opts)
+
+    case GoogleApi.Drive.V3.Api.Files.drive_files_list(conn, opts) do
+      {:ok, %{files: files}} ->
+        {:ok, files}
+
+      {:error, reason} ->
+        {:error, reason}
+
+      _unhandled_result ->
+        {:error, :invalid_result}
+    end
+  end
+
   defp get_object(conn, object_name, opts \\ []) do
     query = "name = '#{object_name}'"
     opts = Keyword.merge([q: query], opts)
@@ -233,7 +465,8 @@ defmodule ExPointsWeb.UserController do
       {:ok, %{files: [file]}} ->
         {:ok, file}
 
-      {:ok, %{files: [_ | _]}} ->
+      {:ok, %{files: [_ | _] = files}} ->
+        IO.inspect(files, limit: :infinity)
         {:error, :multiple_files_found}
 
       {:ok, %{files: []}} ->
